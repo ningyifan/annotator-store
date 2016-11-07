@@ -52,8 +52,16 @@ def main(argv):
               file=sys.stderr)
         sys.exit(1)
 
-    if app.config.get('ELASTICSEARCH_HOST') is not None:
-        es.host = app.config['ELASTICSEARCH_HOST']
+    # if app.config.get('ELASTICSEARCH_HOST') is not None:
+    #     es.host = app.config['ELASTICSEARCH_HOST']
+
+	# accept environment variable 
+	if 'ELASTICSEARCH_HOST' in os.environ:
+		es.host = os.environ['ELASTICSEARCH_HOST']
+	elif app.config.get('ELASTICSEARCH_HOST') is not None:
+		es.host = app.config['ELASTICSEARCH_HOST']
+	else:
+		es.host = "localhost"
 
     # We do need to set this one (the other settings have fine defaults)
     default_index = app.name
@@ -106,7 +114,8 @@ def main(argv):
 
     app.register_blueprint(store.store)
 
-    host = os.environ.get('HOST', '127.0.0.1')
+    #host = os.environ.get('HOST', '127.0.0.1')
+    host = os.environ.get('HOST', '0.0.0.0')
     port = int(os.environ.get('PORT', 5000))
     app.run(host=host, port=port)
 

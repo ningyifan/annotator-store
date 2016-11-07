@@ -11,9 +11,9 @@ from six.moves.urllib.parse import urlparse
 
 log = logging.getLogger(__name__)
 
-RESULTS_MAX_SIZE = 200
-RESULTS_DEFAULT_SIZE = 20
-
+RESULTS_MAX_SIZE = 400
+RESULTS_DEFAULT_SIZE = 200
+import os
 
 class ElasticSearch(object):
     """
@@ -24,8 +24,13 @@ class ElasticSearch(object):
     the corresponding attributes before the connection (self.conn) is used.
     """
 
+    if "ELASTICSEARCH_PORT_9200_TCP_ADDR" in os.environ:
+        hostname = os.environ["ELASTICSEARCH_PORT_9200_TCP_ADDR"]
+    else:
+        hostname = "0.0.0.0"
+
     def __init__(self,
-                 host='http://127.0.0.1:9200',
+                 host='http://'+hostname+':9200',
                  index='annotator',
                  authorization_enabled=False):
         self.host = host
@@ -88,6 +93,8 @@ class _Model(dict):
     @classmethod
     def create_all(cls):
         log.info("Creating index '%s'.", cls.es.index)
+        log.info("es environ: %s" % os.environ)
+
         conn = cls.es.conn
         try:
             conn.indices.create(cls.es.index)
