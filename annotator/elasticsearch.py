@@ -24,8 +24,8 @@ class ElasticSearch(object):
     the corresponding attributes before the connection (self.conn) is used.
     """
 
-    if "ELASTICSEARCH_PORT_9200_TCP_ADDR" in os.environ:
-        hostname = os.environ["ELASTICSEARCH_PORT_9200_TCP_ADDR"]
+    if "ELASTICSEARCH_HOST" in os.environ:
+        hostname = os.environ["ELASTICSEARCH_HOST"]
     else:
         hostname = "0.0.0.0"
 
@@ -33,6 +33,9 @@ class ElasticSearch(object):
                  host='http://'+hostname+':9200',
                  index='annotator',
                  authorization_enabled=False):
+
+
+
         self.host = host
         self.index = index
         self.authorization_enabled = authorization_enabled
@@ -92,8 +95,6 @@ class _Model(dict):
 
     @classmethod
     def create_all(cls):
-        log.info("Creating index '%s'.", cls.es.index)
-        log.info("es environ: %s" % os.environ)
 
         conn = cls.es.conn
         try:
