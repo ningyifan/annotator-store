@@ -23,7 +23,7 @@ class ElasticSearch(object):
     Settings for the ES host and index name etcetera can still be changed in
     the corresponding attributes before the connection (self.conn) is used.
     """
-
+	# accept environment variables
     if "ELASTICSEARCH_HOST" in os.environ:
         hostname = os.environ["ELASTICSEARCH_HOST"]
     else:
@@ -33,8 +33,6 @@ class ElasticSearch(object):
                  host='http://'+hostname+':9200',
                  index='annotator',
                  authorization_enabled=False):
-
-
 
         self.host = host
         self.index = index
