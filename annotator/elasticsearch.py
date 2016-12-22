@@ -11,8 +11,8 @@ from six.moves.urllib.parse import urlparse
 
 log = logging.getLogger(__name__)
 
-RESULTS_MAX_SIZE = 400
-RESULTS_DEFAULT_SIZE = 200
+RESULTS_MAX_SIZE = 2000
+RESULTS_DEFAULT_SIZE = 1000
 import os
 
 class ElasticSearch(object):
